@@ -105,8 +105,8 @@
                     const formData = new FormData();
                     formData.append('audio', blob, 'recording.webm');
 
-                    // Call FastAPI backend running on local port 8000
-                    const res = await fetch('http://localhost:8000/transcribe', {
+                    // Call FastAPI backend running on local port 8001
+                    const res = await fetch('http://localhost:8001/transcribe', {
                         method: 'POST',
                         body: formData
                     });
@@ -192,7 +192,7 @@
             ttsBtn.disabled = true;
             ttsBtn.textContent = "⏳ Speaking...";
             
-            const res = await fetch('http://localhost:8000/speak', {
+            const res = await fetch('http://localhost:8001/speak', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
