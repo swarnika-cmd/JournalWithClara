@@ -2,6 +2,8 @@ import { useState } from "react";
 import { apiRequest } from "../../lib/api";
 import { toast } from "sonner";
 import { Search, Loader2, ArrowRight, Calendar, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { useTypewriter } from "../../hooks/useTypewriter";
 
 interface Source {
   id: string;
@@ -26,6 +28,8 @@ export function AskView({ onBack, onViewEntry }: AskViewProps) {
   const [answer, setAnswer] = useState("");
   const [sources, setSources] = useState<Source[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+
+  const animatedAnswer = useTypewriter(answer, 20);
 
   const suggestedQuestions = [
     "What makes me feel happy?",
@@ -140,13 +144,15 @@ export function AskView({ onBack, onViewEntry }: AskViewProps) {
                 <span className="text-xs font-body text-dusty-rose pl-2 font-semibold flex items-center gap-1">
                   <Sparkles className="h-3.5 w-3.5" /> Clara's Answer:
                 </span>
-                <div
+                 <div
                   className="w-full rounded-2xl px-5 py-4 font-body text-sm text-ink-brown border border-dusty-rose/20 leading-relaxed shadow-sm"
                   style={{
                     background: "rgba(255, 248, 240, 0.95)",
                   }}
                 >
-                  {answer}
+                  <div className="prose prose-sm max-w-none text-ink-brown space-y-2 [&_strong]:font-semibold [&_strong]:text-deep-red">
+                    <ReactMarkdown>{animatedAnswer}</ReactMarkdown>
+                  </div>
                 </div>
               </div>
 

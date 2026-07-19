@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { apiRequest } from "../../lib/api";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import { useTypewriter } from "../../hooks/useTypewriter";
 
 interface RecordViewProps {
   onBack: () => void;
@@ -12,6 +14,8 @@ export function RecordView({ onBack }: RecordViewProps) {
   const [transcript, setTranscript] = useState("");
   const [claraText, setClaraText] = useState("");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+
+  const animatedClaraText = useTypewriter(claraText, 20);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
@@ -318,7 +322,9 @@ export function RecordView({ onBack }: RecordViewProps) {
                       boxShadow: "0 4px 16px rgba(139, 34, 82, 0.04)"
                     }}
                   >
-                    {claraText}
+                    <div className="prose prose-sm max-w-none text-ink-brown space-y-2 [&_strong]:font-semibold [&_strong]:text-deep-red animate-fade-in">
+                      <ReactMarkdown>{animatedClaraText}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               )}

@@ -216,7 +216,7 @@ function ClaraJournalMain() {
               }}
             >
               <NavTabButton active={dashboardView === "home"} onClick={() => setDashboardView("home")} label="Home" icon="🏠" />
-              <NavTabButton active={dashboardView === "record"} onClick={() => setDashboardView("record")} label="Record" icon="🎙️" />
+              <NavTabButton active={false} onClick={() => setDashboardView("record")} label="Record" icon="🎙️" />
               <NavTabButton active={dashboardView === "timeline"} onClick={() => setDashboardView("timeline")} label="Timeline" icon="📅" />
               <NavTabButton active={dashboardView === "ask"} onClick={() => setDashboardView("ask")} label="Ask Clara" icon="🔍" />
             </div>
