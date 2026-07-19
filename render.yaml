@@ -33,9 +33,8 @@ services:
         generateValue: true
 
   # 2. React Vite Frontend (Static Site)
-  - type: web
+  - type: static
     name: mrbrown-frontend
-    env: static
     plan: free
     buildCommand: cd clara-keeps-secrets && npm install && npm run build
     publishPath: clara-keeps-secrets/.output/public
@@ -51,15 +50,14 @@ services:
         source: /*
         destination: /index.html
 
-# 3. PostgreSQL Database with pgvector support
-databases:
-  - name: mrbrown-db
-    plan: free
-    postgresMajorVersion: 15
-
-# 4. Redis Cache
-interfaces:
+  # 3. Redis Cache
   - type: redis
     name: mrbrown-redis
     plan: free
     ipAllowList: [] # Allow only internal services to connect
+
+# 4. PostgreSQL Database with pgvector support
+databases:
+  - name: mrbrown-db
+    plan: free
+    postgresMajorVersion: 15
