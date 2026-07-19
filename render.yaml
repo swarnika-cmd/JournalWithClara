@@ -33,11 +33,12 @@ services:
         generateValue: true
 
   # 2. React Vite Frontend (Static Site)
-  - type: static
+  - type: web
     name: mrbrown-frontend
+    runtime: static
     plan: free
     buildCommand: cd clara-keeps-secrets && npm install && npm run build
-    publishPath: clara-keeps-secrets/.output/public
+    staticPublishPath: clara-keeps-secrets/.output/public
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
