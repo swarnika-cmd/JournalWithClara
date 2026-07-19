@@ -1,4 +1,4 @@
-# 🎙️ Clara → Voice Memory: Complete Build Roadmap
+# 🎙️ Mr Brown → Voice Memory: Complete Build Roadmap
 
 > **What you're building**: A voice-first AI companion that lets users talk daily, remembers everything, answers questions about their past, and visualizes emotional patterns over time.
 
@@ -9,7 +9,7 @@
 ## Your Current Repo Structure
 
 ```
-Clara_VoiceAgent/
+Mr Brown_VoiceAgent/
 ├── backend/
 │   ├── main.py              ← FastAPI, 3 endpoints (/transcribe, /speak, /)
 │   ├── stt_service.py       ← Deepgram Nova-2 STT (async, working)
@@ -29,7 +29,7 @@ Clara_VoiceAgent/
 ## Target Architecture (What You'll End Up With)
 
 ```
-Clara_VoiceMemory/
+Mr Brown_VoiceMemory/
 ├── frontend/                     ← Next.js 14 (App Router) + Tailwind
 │   ├── app/
 │   │   ├── layout.tsx            ← root layout, fonts, metadata
@@ -38,7 +38,7 @@ Clara_VoiceMemory/
 │   │   ├── register/page.tsx
 │   │   ├── dashboard/
 │   │   │   ├── page.tsx          ← main dashboard (mood calendar + recent entries)
-│   │   │   ├── record/page.tsx   ← voice recording + Clara conversation
+│   │   │   ├── record/page.tsx   ← voice recording + Mr Brown conversation
 │   │   │   ├── timeline/page.tsx ← all entries, scrollable
 │   │   │   ├── ask/page.tsx      ← "Ask Your Past" RAG search
 │   │   │   └── insights/page.tsx ← weekly AI-generated summary
@@ -59,7 +59,7 @@ Clara_VoiceMemory/
 │   │   ├── services/
 │   │   │   ├── stt.service.ts       ← Deepgram (port from Python)
 │   │   │   ├── tts.service.ts       ← ElevenLabs (port from Python)
-│   │   │   ├── llm.service.ts       ← OpenAI/Gemini for Clara's brain
+│   │   │   ├── llm.service.ts       ← OpenAI/Gemini for Mr Brown's brain
 │   │   │   ├── sentiment.service.ts ← mood scoring
 │   │   │   ├── embedding.service.ts ← vector embeddings
 │   │   │   └── rag.service.ts       ← retrieve + generate
@@ -101,7 +101,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
    - Create a `globals.css` with CSS variables for your palette
 
 3. **Build the landing page** (`app/page.tsx`)
-   - Hero section: bold headline, subtitle, CTA button ("Start Talking to Clara")
+   - Hero section: bold headline, subtitle, CTA button ("Start Talking to Mr Brown")
    - Features grid: 4 cards (Voice Journaling, Memory Search, Mood Tracking, Weekly Insights)
    - Social proof section (can be mock testimonials for now)
    - Footer with links
@@ -159,7 +159,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 
 5. **Create the authenticated dashboard layout**
    - `app/dashboard/layout.tsx` — sidebar nav + top bar with user avatar
-   - Sidebar links: Record, Timeline, Ask Clara, Insights, Settings
+   - Sidebar links: Record, Timeline, Ask Mr Brown, Insights, Settings
    - `app/dashboard/page.tsx` — placeholder "Welcome back, {name}" for now
 
 ### What this proves to recruiters:
@@ -224,9 +224,9 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 
 ---
 
-## Feature 4: Clara's Brain (LLM-Powered Conversational Response)
+## Feature 4: Mr Brown's Brain (LLM-Powered Conversational Response)
 
-**Goal**: After the user speaks, Clara responds intelligently — acknowledging what they said, remembering their recent entries, responding empathetically. Clara speaks back via TTS.
+**Goal**: After the user speaks, Mr Brown responds intelligently — acknowledging what they said, remembering their recent entries, responding empathetically. Mr Brown speaks back via TTS.
 
 **Why fourth**: This transforms the app from a "transcription tool" to an "AI companion." Massive demo impact.
 
@@ -239,37 +239,37 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 
 2. **Create the LLM service** (`services/llm.service.ts`)
    - Install OpenAI SDK (or Google Generative AI SDK for Gemini)
-   - Create a function `generateClaraResponse(transcript, recentEntries[])`
-   - System prompt for Clara:
+   - Create a function `generateMr BrownResponse(transcript, recentEntries[])`
+   - System prompt for Mr Brown:
      ```
-     You are Clara, a warm, thoughtful AI companion. The user just shared 
+     You are Mr Brown, a warm, thoughtful AI companion. The user just shared 
      a voice entry with you. Respond naturally, like a good friend who 
      genuinely cares. Be concise (2-3 sentences). Reference their recent 
      past entries when relevant. Never be preachy or robotic.
      ```
    - Feed the current transcript + last 5 entries as context
-   - Return Clara's response text
+   - Return Mr Brown's response text
 
 3. **Update the voice endpoint**
-   - After saving the entry, call LLM service to generate Clara's response
-   - Call TTS service to convert Clara's response to audio
-   - Return both: `{ entry, claraResponse: { text, audioUrl } }`
+   - After saving the entry, call LLM service to generate Mr Brown's response
+   - Call TTS service to convert Mr Brown's response to audio
+   - Return both: `{ entry, mrbrownResponse: { text, audioUrl } }`
 
 4. **Update the recording UI**
-   - After transcription, show Clara's text response in a chat bubble
-   - Auto-play Clara's audio response
-   - Show a mini conversation thread: User entry (left) → Clara response (right)
+   - After transcription, show Mr Brown's text response in a chat bubble
+   - Auto-play Mr Brown's audio response
+   - Show a mini conversation thread: User entry (left) → Mr Brown response (right)
 
-5. **Add a "Clara is thinking..." state**
+5. **Add a "Mr Brown is thinking..." state**
    - Show a typing animation while waiting for LLM + TTS
    - Smooth transition from recording → transcribing → thinking → responding
 
 ### What this proves to recruiters:
 - You can integrate LLMs into a product (not just a chatbot wrapper)
 - You understand system prompts, context management
-- The demo factor is huge — Clara literally talks back
+- The demo factor is huge — Mr Brown literally talks back
 
-### Deliverable: User speaks → Clara thinks → Clara responds with voice + text.
+### Deliverable: User speaks → Mr Brown thinks → Mr Brown responds with voice + text.
 
 ---
 
@@ -293,7 +293,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
      - First 2 lines of transcript (truncated)
      - Mood indicator dot (colored circle — grey for now, real colors later)
      - Duration badge
-   - Click to expand: full transcript + Clara's response + audio playback
+   - Click to expand: full transcript + Mr Brown's response + audio playback
    - Infinite scroll or "Load More" pagination
 
 3. **Add a search bar**
@@ -307,7 +307,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
    - Optimistic UI update (remove card immediately, rollback on error)
 
 5. **Empty state**
-   - If no entries yet, show a friendly message: "No entries yet. Tap the mic to start talking to Clara."
+   - If no entries yet, show a friendly message: "No entries yet. Tap the mic to start talking to Mr Brown."
    - Include a CTA button linking to the record page
 
 ### What this proves to recruiters:
@@ -373,7 +373,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 
 ## Feature 7: "Ask Your Past" — RAG Search
 
-**Goal**: User types or speaks a question like "When was I last stressed about work?" and Clara searches through all past entries to find and summarize the answer.
+**Goal**: User types or speaks a question like "When was I last stressed about work?" and Mr Brown searches through all past entries to find and summarize the answer.
 
 **Why seventh**: This is the RAG feature. The JD literally says "quality RAG" as a bonus. This is your crown jewel.
 
@@ -426,8 +426,8 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 6. **Build the "Ask Your Past" page** (`app/dashboard/ask/page.tsx`)
    - Clean search interface: large input field + submit button
    - Also add a mic button → record question via voice → transcribe → same flow
-   - Show Clara's answer in a conversational card
-   - Below the answer: "Sources" section showing which entries Clara pulled from
+   - Show Mr Brown's answer in a conversational card
+   - Below the answer: "Sources" section showing which entries Mr Brown pulled from
      - Each source is clickable → navigates to that entry in timeline
    - Suggested questions as chips: "What made me happy this month?", "When did I last mention family?", "What are my recurring worries?"
 
@@ -436,13 +436,13 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 - pgvector, embeddings, similarity search — actual backend depth
 - The exact AI skill they list as a bonus
 
-### Deliverable: User asks a question → Clara retrieves past entries → answers with citations.
+### Deliverable: User asks a question → Mr Brown retrieves past entries → answers with citations.
 
 ---
 
 ## Feature 8: Weekly Insights (AI-Generated Summaries)
 
-**Goal**: Every week, Clara auto-generates a summary of the user's entries: key themes, emotional arc, patterns, and gentle suggestions. Displayed as a beautiful card on the dashboard.
+**Goal**: Every week, Mr Brown auto-generates a summary of the user's entries: key themes, emotional arc, patterns, and gentle suggestions. Displayed as a beautiful card on the dashboard.
 
 **Why eighth**: This is the "personalization" module the JD mentions. Shows you can build async processing and product features.
 
@@ -578,7 +578,7 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 | 1 | Next.js + Tailwind + Landing Page | 2-3 days | A beautiful, deployed landing page |
 | 2 | Auth System (JWT + PostgreSQL) | 2-3 days | Users can sign up and log in |
 | 3 | Voice Recording + Transcription | 2 days | Core loop works: speak → save |
-| 4 | Clara's Brain (LLM + TTS response) | 2 days | Clara talks back intelligently |
+| 4 | Mr Brown's Brain (LLM + TTS response) | 2 days | Mr Brown talks back intelligently |
 | 5 | Timeline View | 1-2 days | Users can browse their history |
 | 6 | Mood Calendar + Sentiment | 2-3 days | Visual wow factor on dashboard |
 | 7 | "Ask Your Past" RAG | 2-3 days | The killer feature. Real RAG. |
@@ -593,12 +593,12 @@ Each feature is a self-contained unit. Finish one before starting the next. Each
 
 > *2 minutes. This order. No fluff.*
 
-1. **0:00** — Open the landing page. "This is Clara — a voice-first AI that remembers your life."
+1. **0:00** — Open the landing page. "This is Mr Brown — a voice-first AI that remembers your life."
 2. **0:15** — Sign up. Show the auth flow. "Full JWT auth with refresh tokens."
 3. **0:30** — Record a voice entry. Show live transcription. "Deepgram Nova-2 for STT."
-4. **0:45** — Clara responds with voice. "Clara uses GPT-4 with context from your past entries, and speaks back via ElevenLabs."
+4. **0:45** — Mr Brown responds with voice. "Mr Brown uses GPT-4 with context from your past entries, and speaks back via ElevenLabs."
 5. **1:00** — Open mood calendar. "Every entry is sentiment-analyzed. This heatmap shows your emotional patterns."
-6. **1:15** — Ask "What stressed me out this month?" Show Clara's RAG answer with source entries. "This is pgvector similarity search across all past entries."
+6. **1:15** — Ask "What stressed me out this month?" Show Mr Brown's RAG answer with source entries. "This is pgvector similarity search across all past entries."
 7. **1:30** — Show weekly insight card. "Auto-generated every Sunday via a cron job."
 8. **1:45** — Quick flash of the GitHub repo: folder structure, CI/CD passing, deployed URLs.
 9. **2:00** — "Stack: Next.js, Tailwind, Express, PostgreSQL + pgvector, Redis, Deepgram, ElevenLabs, GPT-4. Thanks for watching."
