@@ -10,6 +10,7 @@ import { RecordView } from "../components/clara/RecordView";
 import { TimelineView } from "../components/clara/TimelineView";
 import { MoodCalendar } from "../components/clara/MoodCalendar";
 import { AskView } from "../components/clara/AskView";
+import { InsightsView } from "../components/clara/InsightsView";
 import { apiRequest } from "../lib/api";
 
 export const Route = createFileRoute("/")({
@@ -33,7 +34,7 @@ interface StatsData {
 
 function ClaraJournalMain() {
   const [view, setView] = useState<"landing" | "auth">("landing");
-  const [dashboardView, setDashboardView] = useState<"home" | "record" | "timeline" | "ask">("home");
+  const [dashboardView, setDashboardView] = useState<"home" | "record" | "timeline" | "ask" | "insights">("home");
   const { user, logout, isLoading } = useAuth();
 
   const [stats, setStats] = useState<StatsData | null>(null);
@@ -102,6 +103,8 @@ function ClaraJournalMain() {
             <TimelineView onBack={() => setDashboardView("home")} onNewEntry={() => setDashboardView("record")} />
           ) : dashboardView === "ask" ? (
             <AskView onBack={() => setDashboardView("home")} onViewEntry={() => setDashboardView("timeline")} />
+          ) : dashboardView === "insights" ? (
+            <InsightsView onBack={() => setDashboardView("home")} />
           ) : (
             <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 pb-28 pt-12 animate-fade-in w-full">
               <div className="relative w-full max-w-[465px]">
@@ -196,6 +199,12 @@ function ClaraJournalMain() {
                       🎙️ Start Voice Entry
                     </button>
                     <button 
+                      className="mt-1 font-body text-xs text-dusty-rose hover:text-deep-red transition-colors"
+                      onClick={() => setDashboardView("insights")}
+                    >
+                      🌸 View Weekly Keepsakes & Insights
+                    </button>
+                    <button 
                       onClick={logout}
                       className="font-body text-[11px] text-soft-charcoal/60 hover:text-deep-red transition-colors"
                     >
@@ -219,6 +228,7 @@ function ClaraJournalMain() {
               <NavTabButton active={false} onClick={() => setDashboardView("record")} label="Record" icon="🎙️" />
               <NavTabButton active={dashboardView === "timeline"} onClick={() => setDashboardView("timeline")} label="Timeline" icon="📅" />
               <NavTabButton active={dashboardView === "ask"} onClick={() => setDashboardView("ask")} label="Ask Clara" icon="🔍" />
+              <NavTabButton active={dashboardView === "insights"} onClick={() => setDashboardView("insights")} label="Insights" icon="🌸" />
             </div>
           )}
         </>
