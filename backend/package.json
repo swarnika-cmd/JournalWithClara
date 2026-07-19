@@ -1,7 +1,7 @@
 {
-  "name": "clara-backend",
+  "name": "mrbrown-backend",
   "version": "1.0.0",
-  "description": "Express.js backend for Clara AI Voice Journal",
+  "description": "Express.js backend for Mr Brown AI Voice Journal",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
