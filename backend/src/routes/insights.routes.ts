@@ -46,7 +46,7 @@ router.get("/latest", async (req: AuthRequest, res: Response) => {
 
     const insight = await insightService.getLatestInsight(req.user!.userId);
     if (!insight) {
-      return res.status(404).json({ message: "No insights generated yet. Talk to Clara a few times to get started!" });
+      return res.status(404).json({ message: "No insights generated yet. Talk to Mr Brown a few times to get started!" });
     }
 
     // Cache latest insight for 1 hour

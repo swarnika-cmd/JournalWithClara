@@ -119,6 +119,6 @@ export const voiceUploadLimiter = createRateLimiter({
 export const askQueryLimiter = createRateLimiter({
   windowMs: 60 * 1000, // 1 minute
   max: 10,             // max 10 past questions per minute
-  message: "Too many questions. Please give Clara a moment to reflect and ask again.",
+  message: "Too many questions. Please give Mr Brown a moment to reflect and ask again.",
   keyPrefix: "ask",
 });

@@ -21,11 +21,11 @@ model User {
 }
 
 model Entry {
-  id            String                      @id @default(uuid())
-  userId        String
-  transcript    String
-  claraResponse String?
-  audioUrl      String?
+  id              String                      @id @default(uuid())
+  userId          String
+  transcript      String
+  mrbrownResponse String?
+  audioUrl        String?
   duration      Int?
   moodScore     Int?
   moodLabel     String?

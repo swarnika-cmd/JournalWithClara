@@ -18,19 +18,19 @@ export class LLMService {
     }
   }
 
-  async generateClaraResponse(userId: string, currentTranscript: string): Promise<string> {
-    console.log(`[LLM Service] Generating Clara response for user ${userId}. Prompt length: ${currentTranscript.length}`);
+  async generateMrBrownResponse(userId: string, currentTranscript: string): Promise<string> {
+    console.log(`[LLM Service] Generating Mr Brown response for user ${userId}. Prompt length: ${currentTranscript.length}`);
     
     // Fetch last 5 entries for conversation memory context
     let pastContext = "";
     try {
       const pastEntries = await prisma.entry.findMany({
-        where: { userId, claraResponse: { not: null } },
+        where: { userId, mrbrownResponse: { not: null } },
         orderBy: { createdAt: "desc" },
         take: 5,
         select: {
           transcript: true,
-          claraResponse: true,
+          mrbrownResponse: true,
           createdAt: true
         }
       });
@@ -39,7 +39,7 @@ export class LLMService {
       const sorted = pastEntries.reverse();
       
       pastContext = sorted.map(e => 
-        `Journal Entry: "${e.transcript}"\nClara's Response: "${e.claraResponse}"`
+        `Journal Entry: "${e.transcript}"\nMr Brown's Response: "${e.mrbrownResponse}"`
       ).join("\n\n");
     } catch (e) {
       console.error("[LLM Service] Failed to load user history context:", e);
@@ -54,11 +54,11 @@ export class LLMService {
     }
 
     try {
-      const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
+      const systemPrompt = `You are Mr Brown, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
 The user speaks to you to write down their thoughts, feelings, and memories.
 Your role is to respond naturally, like a close, caring friend who genuinely listens.
 Acknowledge their emotions or achievements. Refer to their recent past entries when relevant.
-Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Clara.
+Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Mr Brown.
 Use markdown formatting (such as **bolding** key terms or phrases, and inserting clean line breaks between ideas) to make your reply engaging and readable.
 Keep your response warm and natural (aim for 1 to 3 short paragraphs depending on the depth of the entry).`;
 
@@ -100,11 +100,11 @@ Keep your response warm and natural (aim for 1 to 3 short paragraphs depending o
   private async generateGeminiResponse(currentTranscript: string, pastContext: string): Promise<string> {
     const geminiKey = process.env.GEMINI_API_KEY;
     try {
-      const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
+      const systemPrompt = `You are Mr Brown, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
 The user speaks to you to write down their thoughts, feelings, and memories.
 Your role is to respond naturally, like a close, caring friend who genuinely listens.
 Acknowledge their emotions or achievements. Refer to their recent past entries when relevant.
-Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Clara.
+Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Mr Brown.
 Use markdown formatting (such as **bolding** key terms or phrases, and inserting clean line breaks between ideas) to make your reply engaging and readable.
 Keep your response warm and natural (aim for 1 to 3 short paragraphs depending on the depth of the entry).`;
 
@@ -112,7 +112,7 @@ Keep your response warm and natural (aim for 1 to 3 short paragraphs depending o
       if (pastContext) {
         userPrompt += `[Here is the context of the user's recent past entries to help you remember details they mentioned]\n${pastContext}\n\n`;
       }
-      userPrompt += `User's current voice entry: "${currentTranscript}"\n\nClara's Response:`;
+      userPrompt += `User's current voice entry: "${currentTranscript}"\n\nMr Brown's Response:`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,

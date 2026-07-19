@@ -58,16 +58,16 @@ export class InsightService {
         });
         return `Entry #${idx + 1} (Date: ${dateStr}):
 User transcript: "${e.transcript}"
-Clara's reply: "${e.claraResponse || ""}"`;
+Mr Brown's reply: "${e.mrbrownResponse || ""}"`;
       })
       .join("\n\n");
-
+ 
     // 3. Build Prompt
-    const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary.
+    const systemPrompt = `You are Mr Brown, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary.
 You are generating a weekly emotional review report for the user based on their journal entries from the past 7 days.
 You must analyze the user's weekly entries and return a JSON object with this exact shape:
 {
-  "summary": "A warm, caring 2-3 sentence overview of their week, highlighting what they experienced, written in Clara's comforting persona.",
+  "summary": "A warm, caring 2-3 sentence overview of their week, highlighting what they experienced, written in Mr Brown's comforting persona.",
   "themes": ["theme 1", "theme 2", "theme 3"],
   "moodArc": "A 1-2 sentence description summarizing how their emotional state evolved during the week (e.g., starting stressed but ending on a hopeful note).",
   "highlight": "A specific positive breakthrough, moment of gratitude, or progress they mentioned (quote or reference it warmheartedly).",

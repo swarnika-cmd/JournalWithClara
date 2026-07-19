@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 
 app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "Clara API Backend" });
+  res.json({ status: "ok", service: "Mr Brown API Backend" });
 });
 
 // Auth Routes
@@ -34,5 +34,5 @@ import insightsRoutes from "./routes/insights.routes";
 app.use("/api/insights", insightsRoutes);
 
 app.listen(port, () => {
-  console.log(`[Server] Clara Backend running at http://localhost:${port}`);
+  console.log(`[Server] Mr Brown Backend running at http://localhost:${port}`);
 });

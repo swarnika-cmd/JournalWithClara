@@ -4,7 +4,7 @@ import { embeddingService } from "./embedding.service";
 export interface RAGSource {
   id: string;
   transcript: string;
-  claraResponse: string | null;
+  mrbrownResponse: string | null;
   createdAt: Date;
 }
 
@@ -27,7 +27,7 @@ export class RAGService {
         SELECT 
           id, 
           transcript, 
-          "claraResponse", 
+          "mrbrownResponse", 
           "createdAt"
         FROM "Entry"
         WHERE "userId" = ${userId} AND embedding IS NOT NULL
@@ -54,11 +54,11 @@ export class RAGService {
         });
         return `Memory #${idx + 1} (Date: ${dateStr}):
 User's entry: "${s.transcript}"
-Clara's reply: "${s.claraResponse || ""}"`;
+Mr Brown's reply: "${s.mrbrownResponse || ""}"`;
       }).join("\n\n");
 
       // 4. Construct System instructions + Context prompts for Gemini
-      const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary.
+      const systemPrompt = `You are Mr Brown, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary.
 The user is asking you a question about their past logs or memories.
 Their question is: "${question}"
 
@@ -69,7 +69,7 @@ ${contextText}
 
 Instructions:
 - Answer their question based ONLY on the context entries provided above.
-- Speak directly to the user as Clara, their close, caring friend who remembers their journey.
+- Speak directly to the user as Mr Brown, their close, caring friend who remembers their journey.
 - Reference specific dates, details, achievements, or struggles mentioned in the retrieved logs.
 - Keep your response warm, conversational, and concise (3 to 5 sentences maximum).
 - If the retrieved context does not contain the answer to their question, explain gently that you looked through their logs but couldn't find any mention of it.`;
@@ -82,7 +82,7 @@ Instructions:
           sources: sources.map(s => ({
             id: s.id,
             transcript: s.transcript,
-            claraResponse: s.claraResponse,
+            mrbrownResponse: s.mrbrownResponse,
             createdAt: s.createdAt,
           })),
         };
@@ -125,7 +125,7 @@ Instructions:
         sources: sources.map(s => ({
           id: s.id,
           transcript: s.transcript,
-          claraResponse: s.claraResponse,
+          mrbrownResponse: s.mrbrownResponse,
           createdAt: s.createdAt,
         })),
       };

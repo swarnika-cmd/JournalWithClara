@@ -49,22 +49,22 @@ router.post(
 
       const cleanedTranscript = transcript || "(No speech detected)";
 
-      let claraResponseText = "";
-      let claraAudioBase64: string | null = null;
+      let mrbrownResponseText = "";
+      let mrbrownAudioBase64: string | null = null;
 
       if (cleanedTranscript === "(No speech detected)") {
-        claraResponseText = "I couldn't quite hear you — could you try speaking a little closer to the mic?";
+        mrbrownResponseText = "I couldn't quite hear you — could you try speaking a little closer to the mic?";
       } else {
-        // 2. Call LLM Service (OpenAI) to generate Clara's text response
-        claraResponseText = await llmService.generateClaraResponse(
+        // 2. Call LLM Service (OpenAI) to generate Mr Brown's text response
+        mrbrownResponseText = await llmService.generateMrBrownResponse(
           req.user.userId,
           cleanedTranscript
         );
 
-        // 3. Call TTS Service (ElevenLabs) to convert Clara's response to audio bytes
-        const claraAudioBuffer = await ttsService.generateSpeech(claraResponseText);
-        claraAudioBase64 = claraAudioBuffer.length > 0
-          ? claraAudioBuffer.toString("base64")
+        // 3. Call TTS Service (ElevenLabs) to convert Mr Brown's response to audio bytes
+        const mrbrownAudioBuffer = await ttsService.generateSpeech(mrbrownResponseText);
+        mrbrownAudioBase64 = mrbrownAudioBuffer.length > 0
+          ? mrbrownAudioBuffer.toString("base64")
           : null;
       }
 
@@ -76,7 +76,7 @@ router.post(
         data: {
           userId: req.user.userId,
           transcript: cleanedTranscript,
-          claraResponse: claraResponseText,
+          mrbrownResponse: mrbrownResponseText,
           moodScore: sentiment.score,
           moodLabel: sentiment.label,
           moodReason: sentiment.reason,
@@ -104,7 +104,7 @@ router.post(
 
       return res.json({ 
         entry,
-        claraAudio: claraAudioBase64 
+        mrbrownAudio: mrbrownAudioBase64 
       });
     } catch (error: any) {
       console.error("[Entries Router Error]", error);
@@ -255,7 +255,7 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response): Promise
     if (search) {
       where.OR = [
         { transcript: { contains: search } },
-        { claraResponse: { contains: search } },
+        { mrbrownResponse: { contains: search } },
       ];
     }
 
@@ -326,7 +326,7 @@ router.delete("/:id", authMiddleware, async (req: AuthRequest, res: Response): P
   }
 });
 
-// POST /api/entries/ask (Protected) - Ask Clara a question about past entries (RAG search)
+// POST /api/entries/ask (Protected) - Ask Mr Brown a question about past entries (RAG search)
 router.post("/ask", authMiddleware, askQueryLimiter, async (req: AuthRequest, res: Response): Promise<any> => {
   if (!req.user) {
     return res.status(401).json({ error: "Unauthenticated" });
