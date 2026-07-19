@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import passport from "passport";
 
 // Load environment variables from the local backend .env file
 dotenv.config({ path: path.join(__dirname, "../.env") });
@@ -16,6 +17,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+app.use(passport.initialize());
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "Mr Brown API Backend" });

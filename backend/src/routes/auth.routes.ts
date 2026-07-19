@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma";
 import { authMiddleware, AuthRequest } from "../middleware/auth.middleware";
 import { authLimiter } from "../middleware/rateLimit.middleware";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const router = Router();
 
@@ -157,5 +159,59 @@ router.get("/me", authMiddleware, async (req: AuthRequest, res: Response): Promi
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL!,
+    },
+    async (_accessToken, _refreshToken, profile, done) => {
+      try {
+        const email = profile.emails?.[0]?.value;
+        if (!email) return done(new Error("No email returned from Google"));
+
+        let user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              name: profile.displayName || "Google User",
+              email,
+              passwordHash: await bcrypt.hash(Math.random().toString(36), 10),
+            },
+          });
+        }
+
+        return done(null, { userId: user.id, email: user.email });
+      } catch (err) {
+        return done(err as Error);
+      }
+    }
+  )
+);
+
+// 5. GET /google — kicks off the redirect to Google
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"], session: false })
+);
+
+// 6. GET /google/callback — Google redirects back here
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false, failureRedirect: "/" }),
+  (req, res) => {
+    const user = req.user as { userId: string; email: string };
+    const { accessToken, refreshToken } = generateTokens(user.userId, user.email);
+
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    res.redirect(
+      `${frontendUrl}/auth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    );
+  }
+);
 
 export default router;
