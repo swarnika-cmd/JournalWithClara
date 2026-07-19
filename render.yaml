@@ -1,0 +1,65 @@
+services:
+  # 1. Express API Backend
+  - type: web
+    name: mrbrown-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install && npx prisma generate && npm run build
+    startCommand: cd backend && npx prisma db push && npm run start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mrbrown-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mrbrown-redis
+          property: connectionString
+      # User provided keys
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+  # 2. React Vite Frontend (Static Site)
+  - type: web
+    name: mrbrown-frontend
+    env: static
+    plan: free
+    buildCommand: cd clara-keeps-secrets && npm install && npm run build
+    publishPath: clara-keeps-secrets/.output/public
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: mrbrown-backend
+          property: url
+          path: /api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# 3. PostgreSQL Database with pgvector support
+databases:
+  - name: mrbrown-db
+    plan: free
+    postgresMajorVersion: 15
+
+# 4. Redis Cache
+interfaces:
+  - type: redis
+    name: mrbrown-redis
+    plan: free
+    ipAllowList: [] # Allow only internal services to connect
