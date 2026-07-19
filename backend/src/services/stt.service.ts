@@ -8,8 +8,8 @@ export class STTService {
     if (!apiKey) {
       console.warn("[Deepgram STT] Warning: DEEPGRAM_API_KEY is not defined in env.");
     }
-    // Initialize using DeepgramClient class directly
-    this.deepgram = new DeepgramClient(apiKey || "");
+    // Initialize using options object for SDK v5
+    this.deepgram = new DeepgramClient({ apiKey: apiKey || "" });
   }
 
   async transcribeAudio(audioBuffer: Buffer, mimeType: string): Promise<string> {
@@ -28,7 +28,7 @@ export class STTService {
         }
       );
 
-      const transcript = response.results?.channels?.[0]?.alternatives?.[0]?.transcript || "";
+      const transcript = (response as any).results?.channels?.[0]?.alternatives?.[0]?.transcript || "";
       console.log(`[Deepgram STT] Completed. Transcript: "${transcript}"`);
       return transcript;
     } catch (error) {
