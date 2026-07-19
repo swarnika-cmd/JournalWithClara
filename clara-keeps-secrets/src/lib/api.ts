@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8001/api";
+const rawApiUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8001/api";
+const API_BASE = rawApiUrl.endsWith("/api") ? rawApiUrl : `${rawApiUrl}/api`;
 
 export interface User {
   id: string;

@@ -44,7 +44,6 @@ services:
           type: web
           name: mrbrown-backend
           property: url
-          path: /api
     routes:
       - type: rewrite
         source: /*
