@@ -9,7 +9,7 @@
 
 ### *Your AI Voice Companion That Remembers Everything*
 
-[![Live Demo](https://mrbrown-frontend.onrender.com)](https://mrbrown-frontend.onrender.com)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_App-8B2252?style=for-the-badge&logoColor=white)](https://mrbrown-frontend.onrender.com)
 [![License](https://img.shields.io/badge/License-MIT-D4838F?style=for-the-badge)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
