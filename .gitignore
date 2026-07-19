@@ -2,18 +2,32 @@
 .env
 .env.local
 .env.*.local
+**/backend/.env
+**/backend/.env.local
+**/.env
+**/.env.local
 
-# Python files
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.venv/
-venv/
-ENV/
-env/
+# Node dependencies and build files
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.npm
+.yarn
 
-# Editor settings
+# Local database files
+*.db
+*.db-journal
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configurations
 .vscode/
 .idea/
 *.suo
@@ -21,7 +35,3 @@ env/
 *.njsproj
 *.sln
 *.swp
-
-# OS files
-.DS_Store
-Thumbs.db
