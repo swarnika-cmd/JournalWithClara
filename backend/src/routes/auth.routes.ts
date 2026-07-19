@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma";
 import { authMiddleware, AuthRequest } from "../middleware/auth.middleware";
+import { authLimiter } from "../middleware/rateLimit.middleware";
 
 const router = Router();
 
@@ -20,7 +21,7 @@ function generateTokens(userId: string, email: string) {
 }
 
 // 1. POST /register
-router.post("/register", async (req, res): Promise<any> => {
+router.post("/register", authLimiter, async (req, res): Promise<any> => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -65,7 +66,7 @@ router.post("/register", async (req, res): Promise<any> => {
 });
 
 // 2. POST /login
-router.post("/login", async (req, res): Promise<any> => {
+router.post("/login", authLimiter, async (req, res): Promise<any> => {
   const { email, password } = req.body;
 
   if (!email || !password) {

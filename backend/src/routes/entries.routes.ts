@@ -8,6 +8,8 @@ import { sentimentService } from "../services/sentiment.service";
 import { embeddingService } from "../services/embedding.service";
 import { ragService } from "../services/rag.service";
 import prisma from "../lib/prisma";
+import { deleteCachePattern, deleteCache, getCache, setCache } from "../lib/redis";
+import { voiceUploadLimiter, askQueryLimiter } from "../middleware/rateLimit.middleware";
 
 const router = Router();
 
@@ -23,6 +25,7 @@ const upload = multer({
 router.post(
   "/voice",
   authMiddleware,
+  voiceUploadLimiter,
   upload.single("audio"),
   async (req: AuthRequest, res: Response): Promise<any> => {
     if (!req.user) {
@@ -95,6 +98,10 @@ router.post(
 
       console.log(`[Entries Router] Saved new Entry ID: ${entry.id} for User: ${req.user.email}`);
 
+      // Evict caching keys for this user
+      await deleteCachePattern(`entries:list:${req.user.userId}:*`);
+      await deleteCache(`entries:stats:${req.user.userId}`);
+
       return res.json({ 
         entry,
         claraAudio: claraAudioBase64 
@@ -112,7 +119,16 @@ router.get("/mood-stats", authMiddleware, async (req: AuthRequest, res: Response
     return res.status(401).json({ error: "Unauthenticated" });
   }
 
+  const cacheKey = `entries:stats:${req.user.userId}`;
+  
   try {
+    // Attempt to serve from cache
+    const cachedData = await getCache(cacheKey);
+    if (cachedData) {
+      console.log(`[Entries Router] Serving mood-stats from cache for User: ${req.user.email}`);
+      return res.json(JSON.parse(cachedData));
+    }
+
     const entries = await prisma.entry.findMany({
       where: { userId: req.user.userId },
       orderBy: { createdAt: "asc" },
@@ -195,12 +211,17 @@ router.get("/mood-stats", authMiddleware, async (req: AuthRequest, res: Response
       };
     });
 
-    return res.json({
+    const statsResult = {
       totalCount,
       avgMood,
       streak,
       dailyData,
-    });
+    };
+
+    // Store in cache for 10 minutes
+    await setCache(cacheKey, JSON.stringify(statsResult), 600);
+
+    return res.json(statsResult);
   } catch (error) {
     console.error("[Entries Mood Stats Error]", error);
     return res.status(500).json({ error: "Failed to calculate mood statistics" });
@@ -216,8 +237,17 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response): Promise
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const search = (req.query.search as string) || "";
+  
+  const cacheKey = `entries:list:${req.user.userId}:page_${page}:limit_${limit}:search_${search}`;
 
   try {
+    // Attempt to serve from cache
+    const cachedData = await getCache(cacheKey);
+    if (cachedData) {
+      console.log(`[Entries Router] Serving entries list from cache for User: ${req.user.email}`);
+      return res.json(JSON.parse(cachedData));
+    }
+
     const where: any = {
       userId: req.user.userId,
     };
@@ -243,12 +273,17 @@ router.get("/", authMiddleware, async (req: AuthRequest, res: Response): Promise
 
     const totalPages = Math.ceil(totalCount / limit);
 
-    return res.json({
+    const listResult = {
       entries,
       totalCount,
       page,
       totalPages,
-    });
+    };
+
+    // Store in cache for 5 minutes
+    await setCache(cacheKey, JSON.stringify(listResult), 300);
+
+    return res.json(listResult);
   } catch (error) {
     console.error("[Entries List Error]", error);
     return res.status(500).json({ error: "Failed to fetch entries" });
@@ -280,6 +315,10 @@ router.delete("/:id", authMiddleware, async (req: AuthRequest, res: Response): P
       where: { id },
     });
 
+    // Evict caching keys for this user
+    await deleteCachePattern(`entries:list:${req.user.userId}:*`);
+    await deleteCache(`entries:stats:${req.user.userId}`);
+
     return res.json({ success: true, message: "Entry successfully deleted" });
   } catch (error) {
     console.error("[Entries Delete Error]", error);
@@ -288,7 +327,7 @@ router.delete("/:id", authMiddleware, async (req: AuthRequest, res: Response): P
 });
 
 // POST /api/entries/ask (Protected) - Ask Clara a question about past entries (RAG search)
-router.post("/ask", authMiddleware, async (req: AuthRequest, res: Response): Promise<any> => {
+router.post("/ask", authMiddleware, askQueryLimiter, async (req: AuthRequest, res: Response): Promise<any> => {
   if (!req.user) {
     return res.status(401).json({ error: "Unauthenticated" });
   }
