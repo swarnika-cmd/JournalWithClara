@@ -57,9 +57,10 @@ export class LLMService {
       const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
 The user speaks to you to write down their thoughts, feelings, and memories.
 Your role is to respond naturally, like a close, caring friend who genuinely listens.
-Keep your response concise: 2 to 3 sentences maximum.
 Acknowledge their emotions or achievements. Refer to their recent past entries when relevant.
-Do not sound clinical, preachy, or robotic. Do not mention that you are an AI.`;
+Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Clara.
+Use markdown formatting (such as **bolding** key terms or phrases, and inserting clean line breaks between ideas) to make your reply engaging and readable.
+Keep your response warm and natural (aim for 1 to 3 short paragraphs depending on the depth of the entry).`;
 
       const promptMessages = [];
       
@@ -83,7 +84,7 @@ Do not sound clinical, preachy, or robotic. Do not mention that you are an AI.`;
       const response = await this.openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: promptMessages,
-        max_tokens: 300,
+        max_tokens: 1024,
         temperature: 0.7,
       });
 
@@ -102,15 +103,16 @@ Do not sound clinical, preachy, or robotic. Do not mention that you are an AI.`;
       const systemPrompt = `You are Clara, a warm, thoughtful, and highly empathetic AI companion for a personal voice diary. 
 The user speaks to you to write down their thoughts, feelings, and memories.
 Your role is to respond naturally, like a close, caring friend who genuinely listens.
-Keep your response concise: 2 to 3 sentences maximum.
 Acknowledge their emotions or achievements. Refer to their recent past entries when relevant.
-Do not sound clinical, preachy, or robotic. Do not mention that you are an AI.`;
+Do not sound clinical, preachy, or robotic. Do not mention that you are an AI. You are just Clara.
+Use markdown formatting (such as **bolding** key terms or phrases, and inserting clean line breaks between ideas) to make your reply engaging and readable.
+Keep your response warm and natural (aim for 1 to 3 short paragraphs depending on the depth of the entry).`;
 
-      let fullPrompt = systemPrompt + "\n\n";
+      let userPrompt = "";
       if (pastContext) {
-        fullPrompt += `Context of user's recent past entries:\n${pastContext}\n\n`;
+        userPrompt += `[Here is the context of the user's recent past entries to help you remember details they mentioned]\n${pastContext}\n\n`;
       }
-      fullPrompt += `User's current voice entry: "${currentTranscript}"\n\nClara's Response:`;
+      userPrompt += `User's current voice entry: "${currentTranscript}"\n\nClara's Response:`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
@@ -120,15 +122,20 @@ Do not sound clinical, preachy, or robotic. Do not mention that you are an AI.`;
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            systemInstruction: {
+              parts: [
+                { text: systemPrompt }
+              ]
+            },
             contents: [
               {
                 parts: [
-                  { text: fullPrompt }
+                  { text: userPrompt }
                 ]
               }
             ],
             generationConfig: {
-              maxOutputTokens: 300,
+              maxOutputTokens: 1024,
               temperature: 0.7,
             }
           }),
