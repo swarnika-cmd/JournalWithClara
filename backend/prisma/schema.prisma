@@ -10,13 +10,14 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String    @id @default(uuid())
+  email        String    @unique
   name         String
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   entries      Entry[]
+  insights     Insight[]
 }
 
 model Entry {
@@ -32,4 +33,18 @@ model Entry {
   createdAt     DateTime                    @default(now())
   user          User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
   embedding     Unsupported("vector(768)")?
+}
+
+model Insight {
+  id         String   @id @default(uuid())
+  userId     String
+  weekStart  DateTime
+  weekEnd    DateTime
+  summary    String
+  themes     Json
+  moodArc    String
+  highlight  String
+  suggestion String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

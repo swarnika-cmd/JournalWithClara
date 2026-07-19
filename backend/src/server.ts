@@ -29,6 +29,10 @@ app.use("/api/auth", authRoutes);
 import entriesRoutes from "./routes/entries.routes";
 app.use("/api/entries", entriesRoutes);
 
+// Insights Routes
+import insightsRoutes from "./routes/insights.routes";
+app.use("/api/insights", insightsRoutes);
+
 app.listen(port, () => {
   console.log(`[Server] Clara Backend running at http://localhost:${port}`);
 });
