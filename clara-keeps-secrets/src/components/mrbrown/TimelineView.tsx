@@ -6,7 +6,7 @@ import { Trash2, ChevronDown, ChevronUp, Search, Loader2 } from "lucide-react";
 interface Entry {
   id: string;
   transcript: string;
-  claraResponse: string | null;
+  mrbrownResponse: string | null;
   createdAt: string;
   moodScore: number | null;
   moodLabel: string | null;
@@ -150,7 +150,7 @@ export function TimelineView({ onBack, onNewEntry }: TimelineViewProps) {
         }}
       >
         <span className="absolute right-4 top-3 text-2xl select-none" style={{ transform: "rotate(15deg)" }}>🎀</span>
-        <h2 className="font-script text-dusty-rose text-center mb-1" style={{ fontSize: 36, lineHeight: 1 }}>Clara</h2>
+        <h2 className="font-script text-dusty-rose text-center mb-1" style={{ fontSize: 36, lineHeight: 1 }}>Mr Brown</h2>
         <h3 className="font-display text-ink-brown text-lg text-center mb-5">Diary Timeline</h3>
 
         {/* Search Bar */}
@@ -284,12 +284,12 @@ export function TimelineView({ onBack, onNewEntry }: TimelineViewProps) {
                               </div>
                             )}
 
-                            {/* Clara reply */}
-                            {entry.claraResponse && (
+                            {/* Mr Brown reply */}
+                            {entry.mrbrownResponse && (
                               <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-body text-dusty-rose font-medium">🎀 Clara's Reply:</span>
+                                <span className="text-[10px] font-body text-dusty-rose font-medium">🎀 Mr Brown's Reply:</span>
                                 <div className="rounded-xl px-4 py-3 font-body text-xs text-ink-brown border border-dusty-rose/15 bg-cream/85">
-                                  {entry.claraResponse}
+                                  {entry.mrbrownResponse}
                                 </div>
                               </div>
                             )}

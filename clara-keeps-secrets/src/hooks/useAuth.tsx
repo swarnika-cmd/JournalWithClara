@@ -44,8 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.error("Your session has expired. Please sign in again.");
     };
 
-    window.addEventListener("clara-logout", handleLogout);
-    return () => window.removeEventListener("clara-logout", handleLogout);
+    window.addEventListener("mrbrown-logout", handleLogout);
+    return () => window.removeEventListener("mrbrown-logout", handleLogout);
   }, []);
 
   const login = async (email: string, password: string) => {

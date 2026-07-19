@@ -15,24 +15,24 @@ export interface AuthResponse {
 export const tokenStorage = {
   getAccessToken() {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("clara_access_token");
+    return localStorage.getItem("mrbrown_access_token");
   },
   setAccessToken(token: string) {
     if (typeof window === "undefined") return;
-    localStorage.setItem("clara_access_token", token);
+    localStorage.setItem("mrbrown_access_token", token);
   },
   getRefreshToken() {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("clara_refresh_token");
+    return localStorage.getItem("mrbrown_refresh_token");
   },
   setRefreshToken(token: string) {
     if (typeof window === "undefined") return;
-    localStorage.setItem("clara_refresh_token", token);
+    localStorage.setItem("mrbrown_refresh_token", token);
   },
   clear() {
     if (typeof window === "undefined") return;
-    localStorage.removeItem("clara_access_token");
-    localStorage.removeItem("clara_refresh_token");
+    localStorage.removeItem("mrbrown_access_token");
+    localStorage.removeItem("mrbrown_refresh_token");
   }
 };
 
@@ -99,7 +99,7 @@ export async function apiRequest<T>(
       } catch (err) {
         isRefreshing = false;
         tokenStorage.clear();
-        window.dispatchEvent(new Event("clara-logout"));
+        window.dispatchEvent(new Event("mrbrown-logout"));
         throw new Error("Session expired");
       }
     }

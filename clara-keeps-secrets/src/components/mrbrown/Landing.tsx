@@ -9,13 +9,13 @@ export function Landing({ onOpen }: { onOpen: () => void }) {
           textShadow: "1px 2px 0 rgba(139, 34, 82, 0.15), 0 4px 20px rgba(212, 131, 143, 0.35)",
         }}
       >
-        Clara
+        Mr Brown
       </h1>
       <p className="mt-6 font-display italic text-ink-brown" style={{ fontSize: 20 }}>
         Your Voice. Your Memory. Your Story.
       </p>
       <p className="mt-3 font-body text-ink-brown/80" style={{ fontSize: 14 }}>
-        Talk to Clara every day. She remembers everything.
+        Talk to Mr Brown every day. He remembers everything.
       </p>
 
       <button onClick={onOpen} className="paper-tag mt-10" style={{ fontSize: 15 }}>

@@ -8,7 +8,7 @@ import { useTypewriter } from "../../hooks/useTypewriter";
 interface Source {
   id: string;
   transcript: string;
-  claraResponse: string | null;
+  mrbrownResponse: string | null;
   createdAt: string;
 }
 
@@ -88,9 +88,9 @@ export function AskView({ onBack, onViewEntry }: AskViewProps) {
           }}
         >
           <span className="absolute right-6 top-5 text-2xl select-none" style={{ transform: "rotate(-10deg)" }}>🔍</span>
-          <h2 className="font-script text-dusty-rose mb-2" style={{ fontSize: 36, lineHeight: 1 }}>Ask Clara</h2>
+          <h2 className="font-script text-dusty-rose mb-2" style={{ fontSize: 36, lineHeight: 1 }}>Ask Mr Brown</h2>
           <p className="font-body text-soft-charcoal text-sm max-w-[400px] mx-auto mb-6">
-            Ask questions about your past diary logs and Clara will retrieve your memories to answer you.
+            Ask questions about your past diary logs and Mr Brown will retrieve your memories to answer you.
           </p>
 
           {/* Search Box */}
@@ -132,7 +132,7 @@ export function AskView({ onBack, onViewEntry }: AskViewProps) {
           {isLoading && (
             <div className="flex flex-col items-center gap-4 py-12 animate-fade-in">
               <div className="h-10 w-10 rounded-full border-4 border-dusty-rose/20 border-t-dusty-rose animate-spin" />
-              <p className="font-display text-ink-brown text-sm font-medium">Clara is reading through your past journal entries...</p>
+              <p className="font-display text-ink-brown text-sm font-medium">Mr Brown is reading through your past journal entries...</p>
             </div>
           )}
 
@@ -142,7 +142,7 @@ export function AskView({ onBack, onViewEntry }: AskViewProps) {
               {/* Answer Chat Bubble */}
               <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-body text-dusty-rose pl-2 font-semibold flex items-center gap-1">
-                  <Sparkles className="h-3.5 w-3.5" /> Clara's Answer:
+                  <Sparkles className="h-3.5 w-3.5" /> Mr Brown's Answer:
                 </span>
                  <div
                   className="w-full rounded-2xl px-5 py-4 font-body text-sm text-ink-brown border border-dusty-rose/20 leading-relaxed shadow-sm"

@@ -61,7 +61,7 @@ export function InsightsView({ onBack }: InsightsViewProps) {
   const handleGenerate = async () => {
     setIsGenerating(true);
     setGenerationError(null);
-    const toastId = toast.loading("Clara is reading through your past entries to create your weekly keepsake...");
+    const toastId = toast.loading("Mr Brown is reading through your past entries to create your weekly keepsake...");
     
     try {
       const generated = await apiRequest<Insight>("/insights/generate", {
@@ -165,7 +165,7 @@ export function InsightsView({ onBack }: InsightsViewProps) {
               {/* Summary */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-body text-dusty-rose/80 font-bold flex items-center gap-1">
-                  <Sparkles className="h-3.5 w-3.5 text-deep-red" /> Clara's Summary
+                  <Sparkles className="h-3.5 w-3.5 text-deep-red" /> Mr Brown's Summary
                 </span>
                 <p className="font-body text-sm text-ink-brown leading-relaxed italic">
                   "{latestInsight.summary}"
@@ -246,7 +246,7 @@ export function InsightsView({ onBack }: InsightsViewProps) {
             <div className="flex flex-col gap-1.5 max-w-[320px]">
               <h3 className="font-display text-ink-brown font-semibold text-base">No Weekly Keepsakes Yet</h3>
               <p className="font-body text-soft-charcoal/70 text-xs leading-relaxed">
-                When you record at least 3 journal entries, Clara can reflect on your week and build a keepsake report of your emotional journey.
+                When you record at least 3 journal entries, Mr Brown can reflect on your week and build a keepsake report of your emotional journey.
               </p>
             </div>
 
@@ -265,7 +265,7 @@ export function InsightsView({ onBack }: InsightsViewProps) {
               {isGenerating ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  Clara is reflecting...
+                  Mr Brown is reflecting...
                 </>
               ) : (
                 <>
@@ -313,7 +313,7 @@ export function InsightsView({ onBack }: InsightsViewProps) {
                       <div className="px-5 pb-5 pt-1 border-t border-dusty-rose/10 flex flex-col gap-4 animate-slide-down-in">
                         {/* Summary */}
                         <div className="flex flex-col gap-1.5 mt-2">
-                          <span className="text-[10px] font-body text-dusty-rose font-bold">Clara's Summary</span>
+                          <span className="text-[10px] font-body text-dusty-rose font-bold">Mr Brown's Summary</span>
                           <p className="font-body text-xs text-ink-brown italic leading-relaxed">
                             "{arch.summary}"
                           </p>

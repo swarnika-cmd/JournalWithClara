@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import journalBg from "../assets/journal-bg.png.asset.json";
-import { Landing } from "../components/clara/Landing";
-import { AuthCloud } from "../components/clara/AuthCloud";
-import { FloatingHearts } from "../components/clara/FloatingHearts";
+import { Landing } from "../components/mrbrown/Landing";
+import { AuthCloud } from "../components/mrbrown/AuthCloud";
+import { FloatingHearts } from "../components/mrbrown/FloatingHearts";
 import { AuthProvider, useAuth } from "../hooks/useAuth";
 import { toast } from "sonner";
-import { RecordView } from "../components/clara/RecordView";
-import { TimelineView } from "../components/clara/TimelineView";
-import { MoodCalendar } from "../components/clara/MoodCalendar";
-import { AskView } from "../components/clara/AskView";
-import { InsightsView } from "../components/clara/InsightsView";
+import { RecordView } from "../components/mrbrown/RecordView";
+import { TimelineView } from "../components/mrbrown/TimelineView";
+import { MoodCalendar } from "../components/mrbrown/MoodCalendar";
+import { AskView } from "../components/mrbrown/AskView";
+import { InsightsView } from "../components/mrbrown/InsightsView";
 import { apiRequest } from "../lib/api";
 
 export const Route = createFileRoute("/")({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <AuthProvider>
-      <ClaraJournalMain />
+      <MrBrownJournalMain />
     </AuthProvider>
   );
 }
@@ -32,7 +32,7 @@ interface StatsData {
   dailyData: any;
 }
 
-function ClaraJournalMain() {
+function MrBrownJournalMain() {
   const [view, setView] = useState<"landing" | "auth">("landing");
   const [dashboardView, setDashboardView] = useState<"home" | "record" | "timeline" | "ask" | "insights">("home");
   const { user, logout, isLoading } = useAuth();
@@ -120,7 +120,7 @@ function ClaraJournalMain() {
                   }}
                 >
                   <span className="absolute right-4 top-3 text-2xl select-none" style={{ transform: "rotate(15deg)" }}>🎀</span>
-                  <h2 className="font-script text-dusty-rose mb-1" style={{ fontSize: 36, lineHeight: 1 }}>Clara</h2>
+                  <h2 className="font-script text-dusty-rose mb-1" style={{ fontSize: 36, lineHeight: 1 }}>Mr Brown</h2>
                   
                   <div className="text-center">
                     <h3 className="font-display text-ink-brown text-base font-semibold">Welcome back, {user.name}!</h3>
@@ -168,7 +168,7 @@ function ClaraJournalMain() {
                           });
                           return (
                             <div
-                              key={e.id}
+                               key={e.id}
                               onClick={() => setDashboardView("timeline")}
                               className="px-3.5 py-2.5 rounded-xl border border-dusty-rose/15 bg-cream/30 hover:bg-cream/60 transition-colors cursor-pointer flex items-center justify-between text-xs"
                             >
@@ -227,7 +227,7 @@ function ClaraJournalMain() {
               <NavTabButton active={dashboardView === "home"} onClick={() => setDashboardView("home")} label="Home" icon="🏠" />
               <NavTabButton active={false} onClick={() => setDashboardView("record")} label="Record" icon="🎙️" />
               <NavTabButton active={dashboardView === "timeline"} onClick={() => setDashboardView("timeline")} label="Timeline" icon="📅" />
-              <NavTabButton active={dashboardView === "ask"} onClick={() => setDashboardView("ask")} label="Ask Clara" icon="🔍" />
+              <NavTabButton active={dashboardView === "ask"} onClick={() => setDashboardView("ask")} label="Ask Mr Brown" icon="🔍" />
               <NavTabButton active={dashboardView === "insights"} onClick={() => setDashboardView("insights")} label="Insights" icon="🌸" />
             </div>
           )}

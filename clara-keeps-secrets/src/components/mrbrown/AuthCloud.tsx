@@ -33,7 +33,7 @@ export function AuthCloud({ onBack }: { onBack: () => void }) {
           <span className="absolute right-4 top-3 text-2xl select-none" style={{ transform: "rotate(15deg)" }}>🎀</span>
 
           <div className="text-center">
-            <h2 className="font-script text-dusty-rose" style={{ fontSize: 36, lineHeight: 1 }}>Clara</h2>
+            <h2 className="font-script text-dusty-rose" style={{ fontSize: 36, lineHeight: 1 }}>Mr Brown</h2>
           </div>
 
           {/* Tabs */}

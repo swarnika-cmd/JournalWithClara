@@ -12,10 +12,10 @@ export function RecordView({ onBack }: RecordViewProps) {
   const [status, setStatus] = useState<"idle" | "recording" | "transcribing" | "result">("idle");
   const [timer, setTimer] = useState(0);
   const [transcript, setTranscript] = useState("");
-  const [claraText, setClaraText] = useState("");
+  const [mrbrownText, setMrBrownText] = useState("");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
-  const animatedClaraText = useTypewriter(claraText, 20);
+  const animatedMrBrownText = useTypewriter(mrbrownText, 20);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
@@ -136,22 +136,22 @@ export function RecordView({ onBack }: RecordViewProps) {
 
     try {
       const data = await apiRequest<{ 
-        entry: { transcript: string; claraResponse?: string };
-        claraAudio?: string;
+        entry: { transcript: string; mrbrownResponse?: string };
+        mrbrownAudio?: string;
       }>("/entries/voice", {
         method: "POST",
         body: formData,
       });
 
       setTranscript(data.entry.transcript);
-      setClaraText(data.entry.claraResponse || "");
+      setMrBrownText(data.entry.mrbrownResponse || "");
       setStatus("result");
       toast.success("Transcription saved to your diary!");
 
-      // Play Clara's voice response automatically
-      if (data.claraAudio) {
-        const audio = new Audio("data:audio/mpeg;base64," + data.claraAudio);
-        audio.play().catch((err) => console.error("Clara voice playback failed:", err));
+      // Play Mr Brown's voice response automatically
+      if (data.mrbrownAudio) {
+        const audio = new Audio("data:audio/mpeg;base64," + data.mrbrownAudio);
+        audio.play().catch((err) => console.error("Mr Brown voice playback failed:", err));
       }
     } catch (err: any) {
       console.error("Upload error:", err);
@@ -231,7 +231,7 @@ export function RecordView({ onBack }: RecordViewProps) {
           }}
         >
           <span className="absolute right-4 top-3 text-2xl select-none" style={{ transform: "rotate(15deg)" }}>🎀</span>
-          <h2 className="font-script text-dusty-rose mb-5" style={{ fontSize: 36, lineHeight: 1 }}>Clara</h2>
+          <h2 className="font-script text-dusty-rose mb-5" style={{ fontSize: 36, lineHeight: 1 }}>Mr Brown</h2>
 
           {status === "idle" && (
             <div className="flex flex-col items-center gap-6 animate-fade-in">
@@ -286,7 +286,7 @@ export function RecordView({ onBack }: RecordViewProps) {
               <div className="h-12 w-12 rounded-full border-4 border-dusty-rose/20 border-t-dusty-rose animate-spin" />
               <h3 className="font-display text-ink-brown text-lg">Writing your words...</h3>
               <p className="font-body text-soft-charcoal text-xs animate-pulse">
-                Clara is listening closely to transcribe your voice
+                Mr Brown is listening closely to transcribe your voice
               </p>
             </div>
           )}
@@ -309,11 +309,11 @@ export function RecordView({ onBack }: RecordViewProps) {
                 </div>
               </div>
 
-              {/* Clara's Response Bubble */}
-              {claraText && (
+              {/* Mr Brown's Response Bubble */}
+              {mrbrownText && (
                 <div className="flex flex-col gap-1.5 mt-2 animate-slide-up-in">
                   <span className="text-xs font-body text-dusty-rose pl-2 font-medium flex items-center gap-1">
-                    <span>🎀</span> Clara's Reply:
+                    <span>🎀</span> Mr Brown's Reply:
                   </span>
                   <div
                     className="w-full rounded-2xl px-5 py-4 font-body text-sm text-ink-brown border border-dusty-rose/20 relative"
@@ -323,7 +323,7 @@ export function RecordView({ onBack }: RecordViewProps) {
                     }}
                   >
                     <div className="prose prose-sm max-w-none text-ink-brown space-y-2 [&_strong]:font-semibold [&_strong]:text-deep-red animate-fade-in">
-                      <ReactMarkdown>{animatedClaraText}</ReactMarkdown>
+                      <ReactMarkdown>{animatedMrBrownText}</ReactMarkdown>
                     </div>
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export function RecordView({ onBack }: RecordViewProps) {
 
               <div className="flex flex-col gap-2 w-full mt-4">
                 <button 
-                  onClick={() => { setStatus("idle"); setTranscript(""); setClaraText(""); }} 
+                  onClick={() => { setStatus("idle"); setTranscript(""); setMrBrownText(""); }} 
                   className="wax-seal w-full py-3"
                 >
                   New Entry
